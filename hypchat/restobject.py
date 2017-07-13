@@ -147,7 +147,7 @@ class Room(RestObject):
         data = {'message': message}
         self._requests.post(self.url + '/message', data=data)
 
-    def notification(self, message, color=None, notify=False, format=None):
+    def notification(self, message, color=None, notify=False, format=None, from_label=None):
         """
         Send a message to a room.
         """
@@ -159,6 +159,11 @@ class Room(RestObject):
         data = {'message': message, 'notify': notify, 'message_format': format}
         if color:
             data['color'] = color
+        if from_label:
+            if len(from_label) > 64:
+                data['from'] = from_label[:64]
+            else:
+                data['from'] = from_label
         self._requests.post(self.url + '/notification', data=data)
 
     def topic(self, text):
